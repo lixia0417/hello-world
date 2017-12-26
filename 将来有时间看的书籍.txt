@@ -1,22 +1,16 @@
-ÏìÓ¦Ê½WebÉè¼Æ:HTML5ºÍCSS3ÊµÕ½
+å“åº”å¼Webè®¾è®¡:HTML5å’ŒCSS3å®æˆ˜
 
-RedisÉè¼ÆÓëÊµÏÖ
+Redisè®¾è®¡ä¸å®ç°
 
-tomcat½âÎö
+tomcatè§£æ
 
-Î¢·şÎñ 
+å¾®æœåŠ¡ 
 
-³ÌĞòÔ±ĞŞÁ¶
+ç¨‹åºå‘˜ä¿®ç‚¼
 
 wirsark
 
-·Ö²¼Ê½Ô­Àí
+åˆ†å¸ƒå¼åŸç†
 
-±àÒëÆ÷Ô­Àí
+ç¼–è¯‘å™¨åŸç†
 
-createGame
-
-$ openssl ca -config intermediate/openssl.cnf \
-      -extensions server_cert -days 375 -notext -md sha256 \
-      -in intermediate/csr/www.barretlee.com.csr.pem \
-      -out intermediate/certs/www.barretlee.com.cert.pem
