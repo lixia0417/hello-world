@@ -1,0 +1,31 @@
+
+ps -aux查看进程PID，然后到/proc中找到对应的目录进去看那几个文件。
+
+你可以实时地去查看/proc/****/status文件，部分内容如下：
+
+FDSize: 32   //FD的最大值？
+Groups: 43   //？？
+VmSize:     4832 kB  //该进程总共所占的虚拟空间的总数
+VmLck:         0 kB　//锁定的进程虚拟空间数
+VmRSS:      1348 kB  //RSS空间
+VmData:     2552 kB　//DATA空间
+VmStk:        24 kB  //栈空间
+VmExe:        72 kB  //TEXT空间
+VmLib:      2108 kB  //动态链接库空间
+SigPnd: 0000000000000000  //下边三项是pend, block, ignore的信号量的对应位
+SigBlk: 0000000000000000
+SigIgn: 8000000000001000
+SigCgt: 0000000000014a03
+CapInh: 0000000000000000  //可能是一些Capabilities
+CapPrm: 0000000000000000
+CapEff: 0000000000000000
+
+这些可能对你有用，试试吧！
+
+
+VmSize，VmRss之类的含义
+
+以前记过，后来老忘。再记录一下。
+
+/proc/{pid}/status中的 VmSize, VmLck, VmRSS, VmData, VmStk, VmExe, and VmLib 分别是什么意思？
+解决方法:* VmSize: 虚拟内存大小。 整个进程使用虚拟内存大小，是VmLib, VmExe, VmData, 和 VmStk的总和。 * VmLck: 虚拟内存锁。 进程当前使用的并且加锁的虚拟内存总数 * VmRSS: 虚拟内存驻留集合大小。 这是驻留在物理内存的一部分。它没有交换到硬盘。它包括代码，数据和栈。 * VmData: 虚拟内存数据。 堆使用的虚拟内存。 * VmStk: 虚拟内存栈 栈使用的虚拟内存 * VmExe: 可执行的虚拟内存 可执行的和静态链接库所使用的虚拟内存 * VmLib: 虚拟内存库 动态链接库所使用的虚拟内存 

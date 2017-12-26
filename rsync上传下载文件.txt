@@ -1,0 +1,5 @@
+1.通过sync上传文件到某个远程目录: rsync -av -e ssh /tmp/vbird1Dir root@192.168.40.16:/tmp/tmp16
+2.本机数据备份(将/data/www/xunxia/python的数据备份到/tmp/vbird1Dir底下：):rsync -av /data/www/xunxia/python /tmp/vbird1Dir
+3.利用root的身份登入192.168.40.16将/tmp/tmp16下载到本机/tmp底下:rsync -av -e ssh  root@192.168.40.16:/tmp/tmp16 /tmp
+4.上传时指定ssh的端口号:rsync -av -e 'ssh -p 22' /tmp/dir1218 root@192.168.40.16:/tmp/tmp16
+5.下载时指定ssh端口号:rsync -av -e 'ssh -p 22' root@192.168.40.16:/tmp/tmp16 /tmp

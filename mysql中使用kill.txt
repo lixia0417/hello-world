@@ -1,0 +1,40 @@
+第一个例子:
+ mysql> show processlist;
++----+------+-----------+------+---------+------+-------+------------------+
+| Id | User | Host | db | Command | Time | State | Info |
++----+------+-----------+------+---------+------+-------+------------------+
+| 7 | root | localhost | yy | Sleep | 154 | | NULL |
+| 8 | root | localhost | NULL | Query | 0 | NULL | show processlist |
++----+------+-----------+------+---------+------+-------+------------------+
+2 rows in set (0.00 sec)
+
+mysql> kill 7
+-> ; mysql> show processlist;
++----+------+-----------+------+---------+------+-------+------------------+
+| Id | User | Host | db | Command | Time | State | Info |
++----+------+-----------+------+---------+------+-------+------------------+
+| 8 | root | localhost | NULL | Query | 0 | NULL | show processlist |
++----+------+-----------+------+---------+------+-------+------------------+
+1 row in set (0.00 sec)
+
+第二个例子:
+kill mysql 执行线程
+(1) show processlist;
+-----------+
+| 152 | root | 192.168.0.100:1808 | atomic_data | Query   | 5600 | copy to tmp table | alter table `atomic_data`.`basic_point_beijing_p1`change `valid` `type` int(2) NULL ,chang |
+| 155 | root | 192.168.0.100:1944 | atomic_data | Query   | 4702 | Locked            | alter table `atomic_data`.`basic_point_beijing_p1`change `valid` `type` int(2) NULL ,chang |
+| 158 | root | localhost          | atomic_data | Query   |    0 | NULL              | show processlist                                                                                     |
+
+(2) kill 152;
+Query OK, 0 rows affected (0.00 sec)
+
+(3) show preocesslist;
++-----+------+--------------------+-------------+---------+------+-------------------+------------------------------------------------------------------------------------------------------+
+| Id  | User | Host               | db          | Command | Time | State             | Info                                                                                                 |
++-----+------+--------------------+-------------+---------+------+-------------------+------------------------------------------------------------------------------------------------------+
+| 155 | root | 192.168.0.100:1944 | atomic_data | Query   | 4840 | copy to tmp table | alter table `atomic_data`.`basic_point_beijing_p1`change `valid` `type` int(2) NULL ,chang |
+| 158 | root | localhost          | atomic_data | Query   |    0 | NULL              | show processlist 
+
+说明:1.可以直接通过在mysql中的shell执行杀死连接:mysql> kill pid
+     2.也可以通过mysqladmin杀死连接:比如mysqladmin -u xunxia -p'7DTP5QsRvR$$Qo8' -h192.168.40.16 -P3306  kill pid
+     其中pid是通过show processlist中列出来的id.这是mysqld进程内部使用的线程id.mysql数据库提供上述两种kill某条连接的方式.

@@ -1,0 +1,33 @@
+1.  top
+2。  top -p20870 -H
+3.  ./jstack 20870 > /data/js.txt
+说明:20870是进程号.
+最后一步是把通过2中显示出来的占用cup最大的那个线程的id转成16进制的形式。因为导出来的js.txt里面的线程的id号(nid)是十六进制的,这样才能对应着找到彼此
+
+
+查看内存回收的情况:
+/data/java/jdk1.6.0_29/bin/jstat -gcutil pid intervals counts
+
+查看对象在内存中的占用情况
+/data/java/jdk1.6.0_29/bin/jmap -histo pid > /data/www/jmaps10808.txt
+su - www -c '/data/java/jdk1.6.0_29/bin/jmap -histo 23422 > /data/www/jmaps10808.txt'
+或者用另外的参数查看:
+/data/java/jdk1.6.0_29/bin/jmap -heap pid
+此外这样可以进行一次额外的full gc：
+/data/java/jdk1.6.0_29/bin/jmap -histo:live pid
+可以这样导出二进制文件然后通过eclipse的MAT这样分析：
+/data/java/jdk1.6.0_29/bin/jmap -dump:format=b,file=/data/www/test.bin pid
+
+另外查看永久带的内存占用:
+jmap -permstat pid
+
+
+Thread.sleep 与 obj.wait 时，线程状态有什么区别？
+    sleep和wait的时候线程都是waiting状态，不是blocked状态。其中sleep一定是timed_waiting，wait则可能是waiting也可能是timed_waiting。 blocked状态只有在synchronized代码块或者synchronized方法里面才可能会出现。
+使用wait的时候是必须获取对象锁的，也就是synchronized(this)，或者使用synchronized的方法中，在调用wait方法的时候会把获取到的对象锁释放，而sleep如果也这样写的话是不会释放对象锁的。
+区别在于锁的情况。
+    sleep的线程不会释放锁。wait的线程会释放锁。暂时就知道这点，也许还有更大的区别吧。要查查资料。对了，调用wait的线程，必须拥有这个对象锁，不然会抛出IllegalMonitorStateException。
+而Thread.sleep方法没有锁的限制，想睡觉就睡觉，想起来就起来，调用obj.wait的线程不是想等就等，想起来就起来。要notify或者notifyAll.
+
+
+1.检查的顺序是:top free du -sh 然后数据库连接(show processlist)

@@ -1,0 +1,1 @@
+1.java中new object(),c++中直接object，如果是new object()相当于动态分配内存，该内存后面需要delete掉.

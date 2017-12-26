@@ -1,0 +1,79 @@
+1.查看占用cpu最高的前几个进程的命令
+       ps aux --sort=%cpu |tail -10
+       这条命令可以看到cpu占用最高的10个进程
+       类似的查看占用内存最高的前几个进程的命令:
+       ps aux --sort=rss|tail -10
+2.让输出同时输出到控制台和重定向到文件中:tee命令
+3.yum search "关键字" yum info 软件包 yum install 软件包
+4.利用 last 指令来找出上次登入者的信息
+5.实时采样看cpu的情况:sar -u -P ALL 10 5,后面两个数字表示间隔和次数.
+  查看磁盘使用情况:sar -p -d 10 5
+  查看网络接口情况:sar -n DEV 5 2 
+  查看网络接口错误情况:sar -n EDEV 5 2
+6.wireShark抓包工具的使用:先用ping 域名得到相应的ip,然后在filter的那一栏写上:
+  类似tcp port 11212 and host 192.168.40.16 and tcp[13:1] & 0x7 != 0，这样就可以抓取和主机40.16的11212的端口
+  通信的所有的tcp封包.
+ 7.netstat -s -u 可以统计udp包的信息，包括由于udp接受缓存区满导致的包丢弃.
+8.查看磁盘工作状态:iostat -x interval count
+      参数的含义:
+		await：每一个IO请求的处理的平均时间（单位是微秒毫秒）。这里可以理解为IO的响应时间，一般地系统IO响应时间应该低于5ms，			如果大于10ms就比较大了。
+		%util：在统计时间内所有处理IO时间，除以总共统计时间。例如，如果统计间隔1秒，该设备有0.8秒在处理IO，而0.2秒闲置，那么		       该设备的%util = 0.8/1 = 80%，所以该参数暗示了设备的繁忙程度。一般地，如果该参数是100%表示设备已经接近满负荷运			       行了（当然如果是多磁盘，即使%util是100%，因为磁盘的并发能力，所以磁盘使用未必就到了瓶颈）。
+
+9.查看IO和CPU的情况:vmstat interval count
+      参数的含义:
+		r     表示运行队列(就是说多少个进程真的分配到CPU)，当这个值超过了CPU数目，就会出现CPU瓶颈了。
+		swpd  虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者		              把耗内存的任务迁移到其他机器。
+		us    用户CPU时间，我曾经在一个做加密解密很频繁的服务器上，可以看到us接近100,r运行队列达到80
+		sy    系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
+		wa    IO等待时间百分比(cpu等待IO的百分比)所以值越接近100表示越繁忙.
+		swap si和so表示swap I/O发生的情况.
+
+10.window下查看连接：
+       在windows下可以用命令 netstat -nao 来看，然后找出PID字段的值，然后到Windows的任务管理器里面去看。默认的Windows任务管理器是没有	显示这个字段的值的，可以在“查看”->“选择列”菜单里面勾选一下。
+       在linux下，可以用 netstat -naop 来看，同样也是找PID字段。在linux下知道了PID，那接下来该怎么玩，肯定是所有人都知道了
+
+11.sar -n ALL 2 10 查看网络I/O，即每秒收发的字节数.
+
+12. pidstat -r -p pid interval count
+
+使用-r选项，pidstat将显示各活动进程的内存使用统计：
+linux:~ # pidstat -r -p 13084 1
+Linux 2.6.32.12-0.7-default (linux)             06/18/12        _x86_64_
+15:08:18          PID  minflt/s  majflt/s     VSZ    RSS   %MEM  Command
+以上各列输出的含义如下：
+minflt/s: 每秒次缺页错误次数(minor page faults)，次缺页错误次数意即虚拟内存地址映射成物理内存地址产生的page fault次数
+majflt/s: 每秒主缺页错误次数(major page faults)，当虚拟内存地址映射成物理内存地址时，相应的page在swap中，这样的page fault为major page fault，一般在内存使用紧张时产生
+VSZ:      该进程使用的虚拟内存(以kB为单位)
+RSS:      该进程使用的物理内存(以kB为单位)
+%MEM:     该进程使用内存的百分比
+Command:  拉起进程对应的命令
+
+使用-d选项，我们可以查看进程IO的统计信息：
+linux:~ # pidstat -d 1 2
+Linux 2.6.32.12-0.7-default (linux)             06/18/12        _x86_64_
+17:11:36          PID   kB_rd/s   kB_wr/s kB_ccwr/s  Command
+输出信息含义
+kB_rd/s: 每秒进程从磁盘读取的数据量(以kB为单位)
+kB_wr/s: 每秒进程向磁盘写的数据量(以kB为单位)
+Command: 拉起进程对应的命令
+
+13. tshark命令简单用法：
+抓包：		tshark -wMytshark.txt  -i em1 -n -f 'host 192.168.20.132 and port 7013' -q 
+读取包： 	tshark -r Mytshark.txt -x -V | less
+
+14.wireShark查看重传包的步骤：先在notes标签中查看重传对应的包。然后在filter栏中填写tcp.seq==序列号来找出重传包和原始包.
+
+15.锁竞争查看方法：pidstat -w -p pid interval count 得到让步式上下文切换次数，然后处于cpu核数，得到每个cpu核的
+每秒的让步式上下文切换数目，最后通过公式：（每秒的让步式上下文切换数目）*80000/cpu的运行频率比如1GHz的话就是(1000000000)，如果这个数值大于5%，一般可以认为有锁竞争的存在，程序存在扩展性方面的问题-----------参考：java性能优化指南
+
+16.-XX:+printFlagFinals输出jvm的所有选项和对应的值
+
+17.curl一般用法
+a.模拟post表单提交:curl -X POST --data "type=video&offset=0&count=20" http://be.1717h5.com/admin/subscriptNumber/getMaterials.do，如果参数有特殊字符，要先对参数进行urlencode,
+   或者这样： curl -X POST -d "type=voice" -d "offset=0" -d "count=20" http://be.1717h5.com/admin/subscriptNumber/getMaterials.do
+b. 如果post参数有特殊字符：curl -X POST --data-urlencode "type=voice" --data-urlencode "offset=0" --data-urlencode "count=20" http://be.1717h5.com/admin/subscriptNumber/getMaterials.do
+c.查看详细的信息:curl --trace output.txt 
+d.保存cookie信息到文件中: curl -v -c cookies.txt url
+  从文件中读取cookie并且加上自定义的cookie后传送给服务器: curl -v -b cookie.txt --cookie 'name=xxx' http://192.168.22.43:7013/admin/menu/getTree.do
+e.通过form表单的形式上传文件:curl -F "action=upload" -F "filename=@file.tar.gz" url  这里相当于两个参数，一个是action，一个是filename，其中filename是file表单元素.
+f.模拟post提交Json数据：curl -H "Content-type: application/json;charset=UTF-8" -X POST -d '{"id":100}' url

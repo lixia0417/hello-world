@@ -1,0 +1,26 @@
+例子1：
+ls /usr/local/apache/htdocs/site
+aa
+bb
+cc
+dd
+ee
+zz
+
+只想同步aa,bb,ee这三个目录，其他的不同步。
+rsync --include参数如何使用？谢谢。
+
+使用方法:
+/usr/local/rsync/bin/rsync -azv  --include "aa/" --include "bb/" --include "ee"  --exclude "/*"  --progress rsync://10.1.1.4/site /work/backup/htdocs_bak/site
+
+
+例子2：
+
+/tmp/vbird1Dir/目录下有如下结构:
+python  root1929.txt  vbird11736.log
+
+只想同步python目录.可以如下操作
+rsync -av -e ssh  --include=/python --exclude=/* /tmp/vbird1Dir/ root@192.168.40.16:/tmp/tmp16
+
+总结:
+务必记得--include在--exclude的前面。

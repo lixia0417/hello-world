@@ -1,0 +1,13 @@
+1.losf
+        查看某个进程都打开了那些文件:可以使用:lsof -p pid
+	查看某端口被某个进程占用也开始使用: lsof  -Pn -i  :8080
+	-P :这个选项约束着网络文件的端口号到端口名称的转换。约束转换可以使lsof运行得更快一些。在端口名称的查找不能奏效时，这是很有用的。
+　　    -n :这个选项约束着网络文件的端口号到主机名称的转换。约束转换可以使lsof的运行更快一些。在主机名称的查找不能奏效时，它非常有用。
+2.strace 
+	跟踪pid进程的所有系统调用: strace -f -F -o output.txt -s 150 -T -tt -e trace=all -p pid
+	跟踪某个执行程序的系统调用:strace -o output.txt whoami
+	                           strace -f -o output.txt -e execve ./configure
+	其中whoami和./configure是要执行的程序.-e执行要跟踪哪个系统调用,-s指定大小的默认是32.设置大点，能看到更多的信息
+
+	
+

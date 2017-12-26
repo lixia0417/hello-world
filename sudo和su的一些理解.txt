@@ -1,0 +1,15 @@
+1.
+curUser:sudo -u username command
+输入当前用户的curUser密码（注意不是username的密码）就可以执行这条切换到username，然后执行command的命令
+比如: sudo -u sshd touch /tmp/mysshd
+或者: sudo -u vbird1 sh -c "mkdir ~vbird1/www; cd ~vbird1/www;echo 'This is index.html file' > index.html"
+
+2.su - username -c command
+输入username的密码就可以切换到username，然后执行command命令
+比如：su - root -c "head -n 3 /etc/shadow"
+或者：su - root -c "sh -c 'cd /tmp;cd vbird1Dir;touch root1929.txt'"
+
+
+3理解只要输入『 sudo su - root 』并且输入『自己的口令』后， 立刻变成 root 的身份！
+sudo在没有-c username参数时默认是切换到root的。该语句相当于输入自己的密码切换到root。然后root执行命令su - root，即切换到root自身。这个过程不用输入密码。
+因为使用 root 切换成为任何使用者时，并不需要输入新用户的口令；

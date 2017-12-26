@@ -1,0 +1,2 @@
+ygc 他的作用是回收young区，（包括edge，survisor0，survisor1三个区域）.
+fgc 他的作用是回收young区和old区，（包括edge，survisor0，survisor1三个区域和old区域）

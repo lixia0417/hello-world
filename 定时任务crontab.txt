@@ -1,0 +1,4 @@
+1) 在命令行输入: crontab -e 然后添加相应的任务，wq存盘退出。这个保存在/var/spool/cron中.
+2)直接编辑/etc/crontab 文件，即vi /etc/crontab，添加相应的任务.
+
+	cron服务每分钟不仅要读一次/var/spool/cron内的所有文件，还需要读一次 /etc/crontab,因此我们配置这个文件也能运用cron服务做一些事情。用crontab配置是针对某个用户的，而编辑/etc/crontab是针对系统的任务。

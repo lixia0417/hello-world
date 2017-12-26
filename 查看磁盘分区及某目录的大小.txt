@@ -1,0 +1,9 @@
+1.查看磁盘分区:
+      df -h
+2.查看某个目录属于哪个分区:
+      df -h 目录名称，例如: df -h /data/www/xxitem
+3.查看某目录所占用的空间大小:
+      du -sh 目录名,例如查看/目录下：du -sh /*,或者查看/var目录的大小:du -sh /var
+
+
+5.思路：show processlist看数据库，然后df -h 看硬盘，然后看内存free -m。 顺便工具netstat -natp不要忘记使用了
